@@ -22,5 +22,7 @@ namespace GitCommands
         void MakeFileTemporaryWritable(string fileName, Action<string> writableAction);
 
         string ReadAllText(string path, Encoding encoding);
+
+        void WriteAllText(string path, string contents, Encoding encoding);
     }
 }

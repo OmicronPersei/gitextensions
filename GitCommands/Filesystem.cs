@@ -43,5 +43,10 @@ namespace GitCommands
         {
             return File.ReadAllText(path, encoding);
         }
+
+        public void WriteAllText(string path, string contents, Encoding encoding)
+        {
+            File.WriteAllText(path, contents, encoding);
+        }
     }
 }

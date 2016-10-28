@@ -116,13 +116,9 @@ namespace GitCommands.Config
         {
             try
             {
-                FileInfoExtensions
-                    .MakeFileTemporaryWritable(fileName,
-                                       x =>
-                                       File.WriteAllText(fileName, GetAsString(), GetEncoding()));
-                //_IFilesystem.MakeFileTemporaryWritable(
-                //    fileName,
-                //    )
+                _IFilesystem.MakeFileTemporaryWritable(
+                    fileName,
+                    x => _IFilesystem.WriteAllText(fileName, GetAsString(), GetEncoding()));
             }
             catch (Exception ex)
             {
@@ -313,15 +309,22 @@ namespace GitCommands.Config
             private int pos;
             private StringBuilder token = new StringBuilder();
             private StringBuilder valueToken = new StringBuilder();
+            private IFilesystem _IFilesytem;
 
             public ConfigFileParser(ConfigFile configFile)
             {
+                _IFilesytem = InstantiateFilesystemInterface();
                 _configFile = configFile;
+            }
+
+            protected virtual IFilesystem InstantiateFilesystemInterface()
+            {
+                return new Filesystem();
             }
 
             public void Parse(string aFileContent = null)
             {
-                _fileContent = aFileContent ?? File.ReadAllText(FileName, ConfigFile.GetEncoding());
+                _fileContent = aFileContent ?? _IFilesytem.ReadAllText(FileName, ConfigFile.GetEncoding());
 
                 ParsePart parseFunc = ReadUnknown;
 
