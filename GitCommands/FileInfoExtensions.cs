@@ -3,6 +3,7 @@ using System.IO;
 
 namespace GitCommands
 {
+    //to do: need to find an OO way to make this overridable for unit testing.
     public static class FileInfoExtensions
     {
         /// <summary>

@@ -14,8 +14,12 @@ namespace GitCommands.Config
 
         public bool Local { get; private set; }
 
+        private IFilesystem _IFilesystem;
+
         public ConfigFile(string fileName, bool aLocal)
         {
+            _IFilesystem = GetFilesystemInterface();
+
             ConfigSections = new List<ConfigSection>();
             Local = aLocal;
 
@@ -29,6 +33,11 @@ namespace GitCommands.Config
                 ex.Data.Add(GetType().Name + ".Load", "Could not load config file: " + _fileName);
                 throw;
             }
+        }
+
+        protected virtual IFilesystem GetFilesystemInterface()
+        {
+            return new Filesystem();
         }
 
         public IList<ConfigSection> ConfigSections { get; private set; }
@@ -59,7 +68,6 @@ namespace GitCommands.Config
             ConfigFileParser parser = new ConfigFileParser(this);
             parser.Parse(str);
         }
-
 
         public static string EscapeValue(string value)
         {
@@ -106,14 +114,15 @@ namespace GitCommands.Config
 
         public void Save(string fileName)
         {
-
-
             try
             {
                 FileInfoExtensions
                     .MakeFileTemporaryWritable(fileName,
                                        x =>
                                        File.WriteAllText(fileName, GetAsString(), GetEncoding()));
+                //_IFilesystem.MakeFileTemporaryWritable(
+                //    fileName,
+                //    )
             }
             catch (Exception ex)
             {
