@@ -60,7 +60,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             }
 
             public string AttributeValueToGet = null;
-            public string AttributeValueSet = null;
+            public string AttributeValueLastSet = null;
 
             public override string GetStringDataAttributeFromName(string AttributeName)
             {
@@ -69,7 +69,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 
             public override void SetDataValueForAttribute(string AttributeName, string Value)
             {
-                AttributeValueSet = Value;
+                AttributeValueLastSet = Value;
             }
         }
 
@@ -177,11 +177,11 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             mMock.SetBooleanValue("", false);
 
-            Assert.AreEqual("00", mMockXml.AttributeValueSet);
+            Assert.AreEqual("00", mMockXml.AttributeValueLastSet);
 
             mMock.SetBooleanValue("", true);
 
-            Assert.AreEqual("01", mMockXml.AttributeValueSet);
+            Assert.AreEqual("01", mMockXml.AttributeValueLastSet);
         }
 
         [Test]
@@ -197,7 +197,22 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         [Test]
         public void TestSetLongValueFormattedHex()
         {
+            mMock.SetLongValue("", 0xFE, ConEmuStartInfoSettingsInterface.IntFormatType.hex);
+            Assert.AreEqual("FE", mMockXml.AttributeValueLastSet);
+        }
 
+        [Test]
+        public void TestSetLongValueFormattedDword()
+        {
+            mMock.SetLongValue("", 0xF0000000, ConEmuStartInfoSettingsInterface.IntFormatType.dword);
+            Assert.AreEqual("F0000000", mMockXml.AttributeValueLastSet);
+        }
+
+        [Test]
+        public void TestGetStringValue()
+        {
+            mMockXml.AttributeValueToGet = "blah";
+            Assert.AreEqual("blah", mMockXml.GetStringDataAttributeFromName(""));
         }
 
         #endregion

@@ -19,10 +19,10 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
                 : base ()
             { }
 
-            public string MockGetDataAttributeFromName(string Attribute)
-            {
-                return GetStringDataAttributeFromName(Attribute);
-            }
+            //public string MockGetDataAttributeFromName(string Attribute)
+            //{
+            //    return GetStringDataAttributeFromName(Attribute);
+            //}
         }
 
         private MockConEmuSettings mObj;
@@ -33,14 +33,6 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 
             mObj = new MockConEmuSettings();
             mObj.LoadConEmuStartInfo(cesi);
-        }
-
-        [Test]
-        public void TestGettingStringDataAttributeFromLoadedXmlSettingsDoc()
-        {
-            string actual = mObj.MockGetDataAttributeFromName("FontName");
-
-            Assert.AreEqual("Consolas", actual);
         }
 
         [Test]
@@ -101,29 +93,6 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 
         //}
 
-    }
-
-    /// <summary>
-    /// <para>Class for unit testing methods within the settings without</para>
-    /// <para>without loading a <see cref="ConEmuStartInfo"/> object.</para>
-    /// </summary>
-    public class ConEmuSettingsUnitTestsNoSettingsLoaded
-    {
-        private class MockConEmuStartInfoDisplaySettings : ConEmuStartInfoDisplaySettings
-        {
-            //private XmlElement mSettingsNode;
-
-            
-        }
-
-        private MockConEmuStartInfoDisplaySettings mObj;
-
-        public ConEmuSettingsUnitTestsNoSettingsLoaded()
-        {
-            mObj = new MockConEmuStartInfoDisplaySettings();
-        }
-
-        
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ namespace GitUI.ConEmuSettings
 
         #endregion
 
-        protected virtual void NavigateToSettingsNode()
+        private void NavigateToSettingsNode()
         {
             try
             {

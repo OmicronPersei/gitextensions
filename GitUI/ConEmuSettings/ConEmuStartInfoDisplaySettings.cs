@@ -16,22 +16,16 @@ namespace GitUI.ConEmuSettings
     /// </summary>
     internal class ConEmuStartInfoDisplaySettings : IDisplaySettings, IConEmuStartInfoLoadSave
     {
-        #region XML Settings Constants
+        #region Field Name Constants
 
-        public const string XmlValueNodeName = "value";
-        public const string XmlDataAttributeName = "data";
-
-        public const string XmlFontName = "FontName";
-        public const string XmlFontSize = "FontSize";
-        public const string XmlFontBold = "FontBold";
-        public const string XmlFontItalic = "FontItalic";
-
-        
+        public const string FontName = "FontName";
+        public const string FontSize = "FontSize";
+        public const string FontBold = "FontBold";
+        public const string FontItalic = "FontItalic";
 
         #endregion
 
-        protected XmlDocument mSettingsXml;
-        protected XmlElement mSettingsElem;
+        private ConEmuStartInfoSettingsInterface mSettings;
 
         public ConEmuStartInfoDisplaySettings()
         {
@@ -42,23 +36,7 @@ namespace GitUI.ConEmuSettings
 
         private void LoadSettings()
         {
-            GetFontSettingsFromXml();
-        }
-
-        private void NavigateToSettingsNode()
-        {
-            try
-            {
-                var softwareNode = mSettingsXml.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueSoftware}']") as XmlElement;
-                var conEmuNode = softwareNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueConEmu}']") as XmlElement;
-                var vanillaNode = conEmuNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueDotVanilla}']") as XmlElement;
-
-                mSettingsElem = vanillaNode as XmlElement;
-            }
-            catch
-            {
-                throw new ArgumentException("Could not navigate to the setttings node.");
-            }
+            GetFontSettings();
         }
 
         #endregion  
@@ -69,27 +47,20 @@ namespace GitUI.ConEmuSettings
 
         private class ConEmuFontSettings : IFontSettings
         {
-            public ConEmuFontSettings()
-            { }
-
             public bool Bold { get; set; }
-
             public string FontName { get; set; }
-
             public int FontSize { get; set; }
-
             public bool Italic { get; set; }
         }
 
-        private void GetFontSettingsFromXml()
+        private void GetFontSettings()
         {
             IFontSettings fs = new ConEmuFontSettings();
 
-            fs.FontName = GetStringDataAttributeFromName(XmlFontName);
-            fs.FontSize = Convert.ToInt32(ParseLongInt(
-                GetStringDataAttributeFromName(XmlFontSize)));
-            fs.Bold = ParseBoolean(GetStringDataAttributeFromName(XmlFontBold));
-            fs.Italic = ParseBoolean(GetStringDataAttributeFromName(XmlFontItalic));
+            fs.FontName = mSettings.GetString(FontName);
+            fs.FontSize = Convert.ToInt32(mSettings.GetLongValue(FontSize));
+            fs.Bold = mSettings.GetBooleanValue(FontBold);
+            fs.Italic = mSettings.GetBooleanValue(FontItalic);
 
             FontSettings = fs;
         }
@@ -101,16 +72,12 @@ namespace GitUI.ConEmuSettings
 
         #endregion
 
-        
-
-        
-
         #region IConEmuStartInfoLoadSave interface
 
         public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
-            mSettingsXml = StartInfo.BaseConfiguration;
-            NavigateToSettingsNode();
+            ConEmuStartInfoXmlInterface xmlInterface = new ConEmuStartInfoXmlInterface(StartInfo);
+            mSettings = new ConEmuStartInfoSettingsInterface(xmlInterface);
 
             LoadSettings();
         }
