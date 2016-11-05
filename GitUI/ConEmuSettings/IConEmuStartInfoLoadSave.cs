@@ -13,6 +13,6 @@ namespace GitUI.ConEmuSettings
     internal interface IConEmuStartInfoLoadSave
     {
         void LoadConEmuStartInfo(ConEmuStartInfo StartInfo);
-        ConEmuStartInfo GetStartInfo();
+        ConEmuStartInfo GetConEmuStartInfo();
     }
 }

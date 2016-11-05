@@ -67,7 +67,7 @@ namespace GitUI.ConEmuSettings
 
         #endregion  
 
-        #region Font settings
+        #region DisplaySettings
 
         public IFontSettings FontSettings { get; set; }
 
@@ -85,17 +85,22 @@ namespace GitUI.ConEmuSettings
             public bool Italic { get; set; }
         }
 
-        protected void GetFontSettingsFromXml()
+        private void GetFontSettingsFromXml()
         {
             IFontSettings fs = new ConEmuFontSettings();
 
             fs.FontName = GetStringDataAttributeFromName(XmlFontName);
-            fs.FontSize = Convert.ToInt32(ParseLongFromHexadecimalString(
+            fs.FontSize = Convert.ToInt32(ParseLongInt(
                 GetStringDataAttributeFromName(XmlFontSize)));
-            fs.Bold = GetBooleanFromString(GetStringDataAttributeFromName(XmlFontBold));
-            fs.Italic = GetBooleanFromString(GetStringDataAttributeFromName(XmlFontItalic));
+            fs.Bold = ParseBoolean(GetStringDataAttributeFromName(XmlFontBold));
+            fs.Italic = ParseBoolean(GetStringDataAttributeFromName(XmlFontItalic));
 
             FontSettings = fs;
+        }
+
+        private void SendFontSettingsToXmlDocument()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -111,30 +116,68 @@ namespace GitUI.ConEmuSettings
         /// <returns></returns>
         protected string GetFormattedValue(long val, IntFormatType format)
         {
-            if (format == IntFormatType.dword)
+            switch (format)
             {
-                if (val > 0xFFFFFFFF)
-                {
-                    throw new ArgumentOutOfRangeException("The number storage was dword but the field does not support values larger than 0xFFFFFFFF");
-                }
+                case IntFormatType.dword:
+                    if (val > 0xFFFFFFFF)
+                    {
+                        throw new ArgumentOutOfRangeException("The number storage was dword but the field does not support values larger than 0xFFFFFFFF");
+                    }
 
-                return string.Format(Convert.ToString(val, 16), "00000000").ToUpper();
-            }
-            else if (format == IntFormatType.hex)
-            {
-                if (val > 0xFF)
-                {
-                    throw new ArgumentOutOfRangeException("The number storage type was hex but the field does not support values larger than 0xFF");
-                }
+                    return string.Format(Convert.ToString(val, 16), "00000000").ToUpper();
 
-                return string.Format(Convert.ToString(val, 16), "00").ToUpper();
-            }
-            else
-            {
-                throw new NotImplementedException("Unknown integer storage format for the ConEmu settings XML.");
+                case IntFormatType.hex:
+                    if (val > 0xFF)
+                    {
+                        throw new ArgumentOutOfRangeException("The number storage type was hex but the field does not support values larger than 0xFF");
+                    }
+
+                    return string.Format(Convert.ToString(val, 16), "00").ToUpper();
+
+                default:
+                    throw new NotImplementedException("Unknown integer storage format for the ConEmu settings XML.");
             }
         }
 
+        protected string GetFormattedValue(bool Value)
+        {
+            if (!Value)
+            {
+                return "00";
+            }
+            else
+            {
+                return "01";
+            }
+        }
+
+        protected bool ParseBoolean(string val)
+        {
+            if (val == "00")
+            {
+                return false;
+            }
+            else if (val == "01")
+            {
+                return true;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("Value cannot be correctly parsed as boolean.  Only valid values are 00 and 01");
+            }
+        }
+
+        protected long ParseLongInt(string Value)
+        {
+            return Convert.ToInt64(Value, 16);
+        }
+
+        /// <summary>
+        /// <para>Get the string value of the specified name from the currently loaded</para>
+        /// <para>settings file.</para>
+        /// </summary>
+        /// <param name="Name">Attribute Name value to get data value for.</param>
+        /// <returns>Data value exactly as it is stored.</returns>
         protected string GetStringDataAttributeFromName(string Name)
         {
             var targetElem = mSettingsElem.SelectSingleNode($"{XmlValueNodeName}[@{ConEmuConstants.XmlAttrName}='{Name}']") as XmlElement;
@@ -145,32 +188,6 @@ namespace GitUI.ConEmuSettings
             else
             {
                 throw new ArgumentException($"Could not nagivate to the attribute name {Name}");
-            }
-        }
-
-        protected long ParseLongFromHexadecimalString(string LongVal)
-        {
-            return Convert.ToInt64(LongVal, 16);
-        }
-
-        /// <summary>
-        /// <para>Converts the stored hex value to its intended boolean value.</para>
-        /// </summary>
-        /// <param name="BoolVal"></param>
-        /// <returns></returns>
-        protected bool GetBooleanFromString(string BoolVal)
-        {
-            if (BoolVal == "00")
-            {
-                return false;
-            }
-            else if (BoolVal == "01")
-            {
-                return true;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException("Cannot parse the provided hex value as a bool.");
             }
         }
 
@@ -186,7 +203,7 @@ namespace GitUI.ConEmuSettings
             LoadSettings();
         }
 
-        public ConEmuStartInfo GetStartInfo()
+        public ConEmuStartInfo GetConEmuStartInfo()
         {
             throw new NotImplementedException();
         }

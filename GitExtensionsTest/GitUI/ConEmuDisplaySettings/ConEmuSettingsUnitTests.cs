@@ -30,10 +30,17 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         public ConEmuSettingsUnitTests()
         {
             ConEmuStartInfo cesi = new ConEmuStartInfo();
-            //mBaseSettings = cesi.BaseConfiguration;
 
             mObj = new MockConEmuSettings();
             mObj.LoadConEmuStartInfo(cesi);
+        }
+
+        [Test]
+        public void TestGettingStringDataAttributeFromLoadedXmlSettingsDoc()
+        {
+            string actual = mObj.MockGetDataAttributeFromName("FontName");
+
+            Assert.AreEqual("Consolas", actual);
         }
 
         [Test]
@@ -49,13 +56,12 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             Assert.AreEqual(false, f.Italic);
         }
 
-        [Test]
-        public void TestGettingStringDataAttributeFromLoadedXmlSettingsDoc()
-        {
-            string actual = mObj.MockGetDataAttributeFromName("FontName");
-
-            Assert.AreEqual("Consolas", actual);
-        }
+        //[Test]
+        //public void TestStoringFontValues()
+        //{
+        //    mObj.FontSettings.FontName = "newName";
+        //    mObj.FontSettings
+        //}
 
     }
 
@@ -88,21 +94,30 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
                 return GetFormattedValue(val, format);
             }
 
+            public string MockGetFormattedValue(bool Value)
+            {
+                return GetFormattedValue(Value);
+            }
+
             public string MockGetDataAttributeFromName(string name)
             {
                 return GetStringDataAttributeFromName(name);
             }
 
-            public long TestParseLongFromHexadecimalString(string LongVal)
+            public long TestParseLongInt(string LongVal)
             {
-                return ParseLongFromHexadecimalString(LongVal);
+                return ParseLongInt(LongVal);
             }
 
-            public bool TestGetBooleanFromString(string BoolVal)
+            public bool TestParseBoolean(string BoolVal)
             {
-                return GetBooleanFromString(BoolVal);
+                return ParseBoolean(BoolVal);
             }
 
+            public string TestGetFormattedBoolean(bool Value)
+            {
+                return GetFormattedValue(Value);
+            }
         }
 
         private MockConEmuStartInfoDisplaySettings mObj;
@@ -161,11 +176,11 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             string val = "0c";
 
-            Assert.AreEqual(0xc, mObj.TestParseLongFromHexadecimalString(val));
+            Assert.AreEqual(0xc, mObj.TestParseLongInt(val));
 
             val = "0xF0000000";
 
-            Assert.AreEqual(0xF0000000, mObj.TestParseLongFromHexadecimalString(val));
+            Assert.AreEqual(0xF0000000, mObj.TestParseLongInt(val));
         }
 
         [Test]
@@ -173,11 +188,18 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             string boolFalse = "00";
 
-            Assert.AreEqual(false, mObj.TestGetBooleanFromString(boolFalse));
+            Assert.AreEqual(false, mObj.TestParseBoolean(boolFalse));
 
             string boolTrue = "01";
 
-            Assert.AreEqual(true, mObj.TestGetBooleanFromString(boolTrue));
+            Assert.AreEqual(true, mObj.TestParseBoolean(boolTrue));
+        }
+
+        [Test]
+        public void TestGetHexStringOfBoolean()
+        {
+            Assert.AreEqual("00", mObj.MockGetFormattedValue(false));
+            Assert.AreEqual("01", mObj.MockGetFormattedValue(true));
         }
     }
 
