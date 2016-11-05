@@ -199,6 +199,8 @@
     <Compile Include="CommandsDialogs\SettingsDialog\Pages\DetailedSettingsPage.Designer.cs">
       <DependentUpon>DetailedSettingsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConEmuSettings\ConEmuStartInfoDisplaySettings.cs" />
+    <Compile Include="ConEmuSettings\IDisplaySettingsPacker.cs" />
     <Compile Include="FormStatusOutputLog.cs" />
     <Compile Include="Editor\Diff\CombinedDiffHighlightService.cs" />
     <Compile Include="Editor\Diff\DiffHighlightService.cs" />
