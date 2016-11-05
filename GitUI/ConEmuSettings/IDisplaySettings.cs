@@ -10,12 +10,11 @@ namespace GitUI.ConEmuSettings
     /// <para>Serves as a generic interface for packing display based</para>
     /// <para>settings into a setting object.</para>
     /// </summary>
-    public interface IDisplaySettingsPacker
+    public interface IDisplaySettings
     {
 
 
-        Font FontSettings { get; set; }
-        Font FontBackupSettings { get; set; }
+        IFontSettings FontSettings { get; set; }
 
 
     }

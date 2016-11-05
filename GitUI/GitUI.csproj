@@ -200,7 +200,9 @@
       <DependentUpon>DetailedSettingsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="ConEmuSettings\ConEmuStartInfoDisplaySettings.cs" />
-    <Compile Include="ConEmuSettings\IDisplaySettingsPacker.cs" />
+    <Compile Include="ConEmuSettings\IConEmuStartInfoLoadSave.cs" />
+    <Compile Include="ConEmuSettings\IFontSettings.cs" />
+    <Compile Include="ConEmuSettings\IDisplaySettings.cs" />
     <Compile Include="FormStatusOutputLog.cs" />
     <Compile Include="Editor\Diff\CombinedDiffHighlightService.cs" />
     <Compile Include="Editor\Diff\DiffHighlightService.cs" />
