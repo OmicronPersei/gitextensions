@@ -26,11 +26,7 @@ namespace GitUI.ConEmuSettings
         public const string XmlFontBold = "FontBold";
         public const string XmlFontItalic = "FontItalic";
 
-        public enum IntFormatType
-        {
-            hex,
-            dword
-        };
+        
 
         #endregion
 
@@ -105,93 +101,9 @@ namespace GitUI.ConEmuSettings
 
         #endregion
 
-        #region Data formatting
+        
 
-        /// <summary>
-        /// <para>Provides a wrapper for storing integer values formatted the same</para>
-        /// <para>as the base settings template.</para>
-        /// </summary>
-        /// <param name="val"></param>
-        /// <param name="format"></param>
-        /// <returns></returns>
-        protected string GetFormattedValue(long val, IntFormatType format)
-        {
-            switch (format)
-            {
-                case IntFormatType.dword:
-                    if (val > 0xFFFFFFFF)
-                    {
-                        throw new ArgumentOutOfRangeException("The number storage was dword but the field does not support values larger than 0xFFFFFFFF");
-                    }
-
-                    return string.Format(Convert.ToString(val, 16), "00000000").ToUpper();
-
-                case IntFormatType.hex:
-                    if (val > 0xFF)
-                    {
-                        throw new ArgumentOutOfRangeException("The number storage type was hex but the field does not support values larger than 0xFF");
-                    }
-
-                    return string.Format(Convert.ToString(val, 16), "00").ToUpper();
-
-                default:
-                    throw new NotImplementedException("Unknown integer storage format for the ConEmu settings XML.");
-            }
-        }
-
-        protected string GetFormattedValue(bool Value)
-        {
-            if (!Value)
-            {
-                return "00";
-            }
-            else
-            {
-                return "01";
-            }
-        }
-
-        protected bool ParseBoolean(string val)
-        {
-            if (val == "00")
-            {
-                return false;
-            }
-            else if (val == "01")
-            {
-                return true;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException("Value cannot be correctly parsed as boolean.  Only valid values are 00 and 01");
-            }
-        }
-
-        protected long ParseLongInt(string Value)
-        {
-            return Convert.ToInt64(Value, 16);
-        }
-
-        /// <summary>
-        /// <para>Get the string value of the specified name from the currently loaded</para>
-        /// <para>settings file.</para>
-        /// </summary>
-        /// <param name="Name">Attribute Name value to get data value for.</param>
-        /// <returns>Data value exactly as it is stored.</returns>
-        protected string GetStringDataAttributeFromName(string Name)
-        {
-            var targetElem = mSettingsElem.SelectSingleNode($"{XmlValueNodeName}[@{ConEmuConstants.XmlAttrName}='{Name}']") as XmlElement;
-            if (targetElem != null)
-            {
-                return targetElem.GetAttribute(XmlDataAttributeName);
-            }
-            else
-            {
-                throw new ArgumentException($"Could not nagivate to the attribute name {Name}");
-            }
-        }
-
-        #endregion  
+        
 
         #region IConEmuStartInfoLoadSave interface
 

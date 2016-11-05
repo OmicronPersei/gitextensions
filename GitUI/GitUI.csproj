@@ -200,6 +200,8 @@
       <DependentUpon>DetailedSettingsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="ConEmuSettings\ConEmuStartInfoDisplaySettings.cs" />
+    <Compile Include="ConEmuSettings\ConEmuStartInfoSettingsInterface.cs" />
+    <Compile Include="ConEmuSettings\ConEmuStartInfoXmlInterface.cs" />
     <Compile Include="ConEmuSettings\IConEmuStartInfoLoadSave.cs" />
     <Compile Include="ConEmuSettings\IFontSettings.cs" />
     <Compile Include="ConEmuSettings\IDisplaySettings.cs" />

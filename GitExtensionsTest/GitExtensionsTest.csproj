@@ -94,6 +94,8 @@
     <Compile Include="GitCommands\Patch\PatchTest.cs" />
     <Compile Include="GitUI\AuthorEmailBasedRevisionHighlightingFixture.cs" />
     <Compile Include="GitUI\ConEmuDisplaySettings\ConEmuSettingsUnitTests.cs" />
+    <Compile Include="GitUI\ConEmuDisplaySettings\ConEmuStartInfoSettingsInterfaceUnitTests.cs" />
+    <Compile Include="GitUI\ConEmuDisplaySettings\ConEmuStartInfoXmlInterfaceUnitTests.cs" />
     <Compile Include="GitUI\Editor\Diff\DiffLineNumAnalyzerFixture.cs" />
     <Compile Include="GitUI\Editor\Diff\LinePrefixHelperFixture.cs" />
     <Compile Include="GitUI\FormUpdateFixture.cs" />

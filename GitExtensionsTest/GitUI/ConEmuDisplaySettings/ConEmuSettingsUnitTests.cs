@@ -56,11 +56,49 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             Assert.AreEqual(false, f.Italic);
         }
 
+        private class ConEmuLookAtSettings
+        {
+            protected XmlDocument mSettingsXml;
+            protected XmlElement mSettingsElem;
+
+            public ConEmuLookAtSettings(ConEmuStartInfo StartInfo)
+            {
+                mSettingsXml = StartInfo.BaseConfiguration;
+
+                try
+                {
+                    var softwareNode = mSettingsXml.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueSoftware}']") as XmlElement;
+                    var conEmuNode = softwareNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueConEmu}']") as XmlElement;
+                    var vanillaNode = conEmuNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueDotVanilla}']") as XmlElement;
+
+                    mSettingsElem = vanillaNode as XmlElement;
+                }
+                catch
+                {
+                    throw new ArgumentException("Could not navigate to the setttings node.");
+                }
+            }
+        }
+
         //[Test]
         //public void TestStoringFontValues()
         //{
-        //    mObj.FontSettings.FontName = "newName";
-        //    mObj.FontSettings
+        //    IFontSettings f = mObj.FontSettings;
+        //    IConEmuStartInfoLoadSave c = mObj;
+
+        //    f.FontName = "newName";
+        //    f.Bold = true;
+        //    f.Italic = true;
+
+        //    ConEmuStartInfo settingsSaved = c.GetConEmuStartInfo();
+
+        //    Assert.IsNotNull(settingsSaved);
+
+        //    //Now let's look at what it actually stored.
+
+        //    ConEmuLookAtSettings peek = new ConEmuLookAtSettings(settingsSaved);
+
+
         //}
 
     }
@@ -75,49 +113,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             //private XmlElement mSettingsNode;
 
-            public MockConEmuStartInfoDisplaySettings()
-                : base()
-            {
-                //ConEmuConstants.XmlElementKey
-                //var softwareNode = StartInfo.BaseConfiguration.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueSoftware}']") as XmlElement;
-                //var conEmuNode = softwareNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueConEmu}']") as XmlElement;
-                //var vanillaNode = softwareNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueDotVanilla}']") as XmlElement;
-
-                //if (vanillaNode != null)
-                //{
-                //    mSettingsNode = vanillaNode;
-                //}
-            }
-
-            public string MockGetFormattedValue(long val, IntFormatType format)
-            {
-                return GetFormattedValue(val, format);
-            }
-
-            public string MockGetFormattedValue(bool Value)
-            {
-                return GetFormattedValue(Value);
-            }
-
-            public string MockGetDataAttributeFromName(string name)
-            {
-                return GetStringDataAttributeFromName(name);
-            }
-
-            public long TestParseLongInt(string LongVal)
-            {
-                return ParseLongInt(LongVal);
-            }
-
-            public bool TestParseBoolean(string BoolVal)
-            {
-                return ParseBoolean(BoolVal);
-            }
-
-            public string TestGetFormattedBoolean(bool Value)
-            {
-                return GetFormattedValue(Value);
-            }
+            
         }
 
         private MockConEmuStartInfoDisplaySettings mObj;
@@ -127,80 +123,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             mObj = new MockConEmuStartInfoDisplaySettings();
         }
 
-        [Test]
-        public void TestStoringValueAsHex()
-        {
-            int val = 0xFE;
-
-            string actual = mObj.MockGetFormattedValue(val, ConEmuStartInfoDisplaySettings.IntFormatType.hex);
-
-            Assert.AreEqual("FE", actual);
-        }
-
-        [Test]
-        public void TestStoringValueLargerThanHexThrowsException()
-        {
-            int val = 0x100;
-
-            Assert.Throws<ArgumentOutOfRangeException>(
-                delegate ()
-                {
-                    mObj.MockGetFormattedValue(val, ConEmuStartInfoDisplaySettings.IntFormatType.hex);
-                });
-        }
-
-        [Test]
-        public void TestStoringValueLargerThanDwordThrowsException()
-        {
-            long val = 0x0000000F00000000;
-
-            Assert.Throws<ArgumentOutOfRangeException>(
-                delegate ()
-                {
-                    mObj.MockGetFormattedValue(val, ConEmuStartInfoDisplaySettings.IntFormatType.dword);
-                });
-        }
-
-        [Test]
-        public void TestStoringValueAsDword()
-        {
-            long val = 0xFFFFFFFF;
-
-            string actual = mObj.MockGetFormattedValue(val, ConEmuStartInfoDisplaySettings.IntFormatType.dword);
-
-            Assert.AreEqual("FFFFFFFF", actual);
-        }
-
-        [Test]
-        public void TestGetLongValueFromHexString()
-        {
-            string val = "0c";
-
-            Assert.AreEqual(0xc, mObj.TestParseLongInt(val));
-
-            val = "0xF0000000";
-
-            Assert.AreEqual(0xF0000000, mObj.TestParseLongInt(val));
-        }
-
-        [Test]
-        public void TestGetBooelanFromHexString()
-        {
-            string boolFalse = "00";
-
-            Assert.AreEqual(false, mObj.TestParseBoolean(boolFalse));
-
-            string boolTrue = "01";
-
-            Assert.AreEqual(true, mObj.TestParseBoolean(boolTrue));
-        }
-
-        [Test]
-        public void TestGetHexStringOfBoolean()
-        {
-            Assert.AreEqual("00", mObj.MockGetFormattedValue(false));
-            Assert.AreEqual("01", mObj.MockGetFormattedValue(true));
-        }
+        
     }
 
     /// <summary>
