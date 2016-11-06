@@ -12,8 +12,8 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
     {
         private class MockConEmuStartInfoXmlInterface : ConEmuStartInfoXmlInterface
         {
-            public MockConEmuStartInfoXmlInterface(ConEmuStartInfo StartInfo)
-                : base(StartInfo)
+            public MockConEmuStartInfoXmlInterface()
+                : base()
             { }
         }
 
@@ -22,7 +22,9 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         public ConEmuStartInfoXmlInterfaceUnitTests()
         {
             ConEmuStartInfo cesi = new ConEmuStartInfo();
-            mMock = new MockConEmuStartInfoXmlInterface(cesi);
+
+            mMock = new MockConEmuStartInfoXmlInterface();
+            mMock.LoadStartInfo(cesi);
         }
 
         [Test]
@@ -35,7 +37,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         public void TestSettingStringToConEmuStartInfo()
         {
             mMock.SetDataValueForAttribute("FontName", "UglyFont");
-            Assert.AreEqual("UglyFont", mMock.GetStringDataAttributeFromName("FontFace"));
+            Assert.AreEqual("UglyFont", mMock.GetStringDataAttributeFromName("FontName"));
         }
     }
 }

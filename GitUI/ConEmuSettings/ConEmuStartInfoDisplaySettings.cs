@@ -76,8 +76,8 @@ namespace GitUI.ConEmuSettings
 
         public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
-            ConEmuStartInfoXmlInterface xmlInterface = new ConEmuStartInfoXmlInterface(StartInfo);
-            mSettings = new ConEmuStartInfoSettingsInterface(xmlInterface);
+            mSettings = new ConEmuStartInfoSettingsInterface();
+            mSettings.LoadStartInfo(StartInfo);
 
             LoadSettings();
         }

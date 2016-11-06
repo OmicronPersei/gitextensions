@@ -31,16 +31,19 @@ namespace GitUI.ConEmuSettings
         #endregion
         #region Constructor
 
-        public ConEmuStartInfoXmlInterface(ConEmuStartInfo StartInfo)
-        {
-            mSettingsXml = StartInfo.BaseConfiguration;
-
-            NavigateToSettingsNode();
-        }
+        public ConEmuStartInfoXmlInterface()
+        { }
 
         #endregion
 
-        private void NavigateToSettingsNode()
+        public void LoadStartInfo(ConEmuStartInfo StartInfo)
+        {
+            mSettingsXml = StartInfo.BaseConfiguration;
+
+            LoadSettingsNode();
+        }
+
+        protected virtual void LoadSettingsNode()
         {
             try
             {
@@ -88,7 +91,7 @@ namespace GitUI.ConEmuSettings
         /// <param name="AttributeName"></param>
         public virtual void SetDataValueForAttribute(string AttributeName, string Value)
         {
-            GetElement(AttributeName).SetAttribute(AttributeName, Value);
+            GetElement(AttributeName).SetAttribute(XmlDataAttributeName, Value);
         }
 
         #endregion  

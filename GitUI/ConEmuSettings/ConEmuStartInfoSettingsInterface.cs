@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConEmu.WinForms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,27 @@ using System.Text;
 namespace GitUI.ConEmuSettings
 {
     /// <summary>
-    /// Class that is a wrapper around <see cref="ConEmuStartInfoXmlInterface"/> to format data
-    /// between native types and how they are formatted in the XmlDocument's fashion.
+    /// Class that is a wrapper around <see cref="ConEmuStartInfoXmlInterface"/> to provide
+    /// the ability read/write formatted values to the settings object.
     /// </summary>
     internal class ConEmuStartInfoSettingsInterface
     {
-        private ConEmuStartInfoXmlInterface mXmlInterface;
+        protected ConEmuStartInfoXmlInterface mXmlInterface;
 
-        public ConEmuStartInfoSettingsInterface(ConEmuStartInfoXmlInterface XmlInterface)
+        public ConEmuStartInfoSettingsInterface()
+        { }
+
+        public void LoadStartInfo(ConEmuStartInfo StartInfo)
         {
-            mXmlInterface = XmlInterface;
+            mXmlInterface = InstantiateXmlInterface(StartInfo);
+        }
+
+        protected virtual ConEmuStartInfoXmlInterface InstantiateXmlInterface(ConEmuStartInfo StartInfo)
+        {
+            ConEmuStartInfoXmlInterface xmlInterface = new ConEmuStartInfoXmlInterface();
+            xmlInterface.LoadStartInfo(StartInfo);
+
+            return xmlInterface;
         }
 
         #region Data formatting

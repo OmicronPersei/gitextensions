@@ -14,8 +14,8 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 
         private class MockSettingsInterface : ConEmuStartInfoSettingsInterface
         {
-            public MockSettingsInterface(ConEmuStartInfoXmlInterface XmlInterface)
-                : base(XmlInterface)
+            public MockSettingsInterface()
+                : base()
             { }
 
             public string MockGetFormattedValue(long val, IntFormatType format)
@@ -42,6 +42,16 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             {
                 return GetFormattedValue(Value);
             }
+
+            protected override ConEmuStartInfoXmlInterface InstantiateXmlInterface(ConEmuStartInfo StartInfo)
+            {
+                return new MockXmlInterface();
+            }
+
+            public MockXmlInterface MockXmlInterface
+            {
+                get { return (MockXmlInterface)mXmlInterface; }
+            }
         }
 
         private MockSettingsInterface mMock;
@@ -50,10 +60,10 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         private class MockXmlInterface : ConEmuStartInfoXmlInterface
         {
             public MockXmlInterface()
-                : base(null)
+                : base()
             { }
 
-            protected override void NavigateToSettingsNode()
+            protected override void LoadSettingsNode()
             {
                 //Do nothing.  We are exercizing the data formatting calls, so writing
                 //to an actual XmlDocument object is irrelevant here.
@@ -75,8 +85,9 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 
         public ConEmuStartInfoSettingsInterfaceUnitTests()
         {
-            mMockXml = new MockXmlInterface();
-            mMock = new MockSettingsInterface(mMockXml);
+            mMock = new MockSettingsInterface();
+            mMock.LoadStartInfo(null);
+            mMockXml = mMock.MockXmlInterface;
         }
 
         #endregion
