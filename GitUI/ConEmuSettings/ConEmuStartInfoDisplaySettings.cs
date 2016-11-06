@@ -29,14 +29,37 @@ namespace GitUI.ConEmuSettings
 
         public ConEmuStartInfoDisplaySettings()
         {
-            
+            mSettings = new ConEmuStartInfoSettingsInterface();
         }
+
+        #region IConEmuStartInfoLoadSave interface
+
+        public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
+        {
+            mSettings.LoadConEmuStartInfo(StartInfo);
+
+            LoadAllSettings();
+        }
+
+        public ConEmuStartInfo GetStoredValues()
+        {
+            PackAllSettings();
+
+            return mSettings.GetStoredValues();
+        }
+
+        #endregion
 
         #region Private methods
 
-        private void LoadSettings()
+        private void LoadAllSettings()
         {
             GetFontSettings();
+        }
+
+        private void PackAllSettings()
+        {
+            StoreFontSettings();
         }
 
         #endregion  
@@ -65,28 +88,16 @@ namespace GitUI.ConEmuSettings
             FontSettings = fs;
         }
 
-        private void SendFontSettingsToXmlDocument()
+        private void StoreFontSettings()
         {
-            throw new NotImplementedException();
+            mSettings.SetString(FontName, FontSettings.FontName);
+            mSettings.SetLongValue(FontSize, Convert.ToInt64(FontSettings.FontSize), ConEmuStartInfoSettingsInterface.IntFormatType.dword);
+            mSettings.SetBooleanValue(FontBold, FontSettings.Bold);
+            mSettings.SetBooleanValue(FontItalic, FontSettings.Italic);
         }
 
         #endregion
 
-        #region IConEmuStartInfoLoadSave interface
 
-        public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
-        {
-            mSettings = new ConEmuStartInfoSettingsInterface();
-            mSettings.LoadStartInfo(StartInfo);
-
-            LoadSettings();
-        }
-
-        public ConEmuStartInfo GetConEmuStartInfo()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
     }
 }

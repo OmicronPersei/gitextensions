@@ -10,7 +10,7 @@ namespace GitUI.ConEmuSettings
     /// <summary>
     /// <para>Class for getting and setting values to the <see cref="ConEmuStartInfo.BaseConfiguration"/> </para>
     /// </summary>
-    internal class ConEmuStartInfoXmlInterface
+    internal class ConEmuStartInfoXmlInterface : IConEmuStartInfoLoadSave
     {
         #region XML Settings Constants
 
@@ -27,6 +27,7 @@ namespace GitUI.ConEmuSettings
 
         protected XmlDocument mSettingsXml;
         protected XmlElement mSettingsElem;
+        private ConEmuStartInfo mSettingsObj;
 
         #endregion
         #region Constructor
@@ -35,19 +36,27 @@ namespace GitUI.ConEmuSettings
         { }
 
         #endregion
+        #region IConEmuStartInfoLoadSave Interface
 
-        public void LoadStartInfo(ConEmuStartInfo StartInfo)
+        public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
-            mSettingsXml = StartInfo.BaseConfiguration;
+            mSettingsObj = StartInfo;
 
-            LoadSettingsNode();
+            LoadSettingsNode(StartInfo);
         }
 
-        protected virtual void LoadSettingsNode()
+        public ConEmuStartInfo GetStoredValues()
+        {
+            return mSettingsObj;
+        }
+
+        #endregion
+
+        protected virtual void LoadSettingsNode(ConEmuStartInfo StartInfo)
         {
             try
             {
-                var softwareNode = mSettingsXml.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueSoftware}']") as XmlElement;
+                var softwareNode = StartInfo.BaseConfiguration.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueSoftware}']") as XmlElement;
                 var conEmuNode = softwareNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueConEmu}']") as XmlElement;
                 var vanillaNode = conEmuNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueDotVanilla}']") as XmlElement;
 

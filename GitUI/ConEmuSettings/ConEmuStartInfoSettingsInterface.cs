@@ -10,22 +10,32 @@ namespace GitUI.ConEmuSettings
     /// Class that is a wrapper around <see cref="ConEmuStartInfoXmlInterface"/> to provide
     /// the ability read/write formatted values to the settings object.
     /// </summary>
-    internal class ConEmuStartInfoSettingsInterface
+    internal class ConEmuStartInfoSettingsInterface : IConEmuStartInfoLoadSave
     {
         protected ConEmuStartInfoXmlInterface mXmlInterface;
 
         public ConEmuStartInfoSettingsInterface()
         { }
 
-        public void LoadStartInfo(ConEmuStartInfo StartInfo)
+        #region IConEmuStartInfoLoadSave Interface
+
+        public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
             mXmlInterface = InstantiateXmlInterface(StartInfo);
+
+            mXmlInterface.LoadConEmuStartInfo(StartInfo);
         }
+
+        public ConEmuStartInfo GetStoredValues()
+        {
+            return mXmlInterface.GetStoredValues();
+        }
+
+        #endregion
 
         protected virtual ConEmuStartInfoXmlInterface InstantiateXmlInterface(ConEmuStartInfo StartInfo)
         {
             ConEmuStartInfoXmlInterface xmlInterface = new ConEmuStartInfoXmlInterface();
-            xmlInterface.LoadStartInfo(StartInfo);
 
             return xmlInterface;
         }
@@ -55,7 +65,7 @@ namespace GitUI.ConEmuSettings
                         throw new ArgumentOutOfRangeException("The number storage was dword but the field does not support values larger than 0xFFFFFFFF");
                     }
 
-                    return string.Format(Convert.ToString(val, 16), "00000000").ToUpper();
+                    return (val.ToString("X8")).ToUpper();
 
                 case IntFormatType.hex:
                     if (val > 0xFF)

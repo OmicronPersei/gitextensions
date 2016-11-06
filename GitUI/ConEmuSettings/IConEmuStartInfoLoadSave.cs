@@ -7,12 +7,12 @@ using System.Text;
 namespace GitUI.ConEmuSettings
 {
     /// <summary>
-    /// <para>Provides a wrapper for loading and getting</para>
-    /// <para>a <see cref="ConEmuStartInfo"/> settings object.</para>
+    /// <para>Provides a wrapper for loading a <see cref="ConEmuStartInfo"/> </para>
+    /// <para>for settings modification</para>
     /// </summary>
     internal interface IConEmuStartInfoLoadSave
     {
         void LoadConEmuStartInfo(ConEmuStartInfo StartInfo);
-        ConEmuStartInfo GetConEmuStartInfo();
+        ConEmuStartInfo GetStoredValues();
     }
 }

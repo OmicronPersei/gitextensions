@@ -24,7 +24,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             ConEmuStartInfo cesi = new ConEmuStartInfo();
 
             mMock = new MockConEmuStartInfoXmlInterface();
-            mMock.LoadStartInfo(cesi);
+            mMock.LoadConEmuStartInfo(cesi);
         }
 
         [Test]

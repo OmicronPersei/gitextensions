@@ -63,7 +63,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
                 : base()
             { }
 
-            protected override void LoadSettingsNode()
+            protected override void LoadSettingsNode(ConEmuStartInfo StartInfo)
             {
                 //Do nothing.  We are exercizing the data formatting calls, so writing
                 //to an actual XmlDocument object is irrelevant here.
@@ -86,7 +86,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         public ConEmuStartInfoSettingsInterfaceUnitTests()
         {
             mMock = new MockSettingsInterface();
-            mMock.LoadStartInfo(null);
+            mMock.LoadConEmuStartInfo(null);
             mMockXml = mMock.MockXmlInterface;
         }
 
@@ -135,6 +135,12 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             string actual = mMock.MockGetFormattedValue(val, ConEmuStartInfoSettingsInterface.IntFormatType.dword);
 
             Assert.AreEqual("FFFFFFFF", actual);
+
+            val = 0x0000000f;
+
+            actual = mMock.MockGetFormattedValue(val, ConEmuStartInfoSettingsInterface.IntFormatType.dword);
+
+            Assert.AreEqual("0000000F", actual);
         }
 
         [Test]

@@ -26,13 +26,14 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         }
 
         private MockConEmuSettings mObj;
+        private ConEmuStartInfo mStartInfo;
 
         public ConEmuSettingsUnitTests()
         {
-            ConEmuStartInfo cesi = new ConEmuStartInfo();
+            mStartInfo = new ConEmuStartInfo();
 
             mObj = new MockConEmuSettings();
-            mObj.LoadConEmuStartInfo(cesi);
+            mObj.LoadConEmuStartInfo(mStartInfo);
         }
 
         [Test]
@@ -70,28 +71,52 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
                     throw new ArgumentException("Could not navigate to the setttings node.");
                 }
             }
+
+            /// <summary>
+            /// <para>Get the string value of the specified name from the currently loaded</para>
+            /// <para>settings file.</para>
+            /// </summary>
+            /// <param name="AttributeName">Attribute Name value to get data value for.</param>
+            /// <returns>Data value exactly as it is stored.</returns>
+            public virtual string GetStringDataAttributeFromName(string AttributeName)
+            {
+                XmlElement targetElem = GetElement(AttributeName);
+                if (targetElem != null)
+                {
+                    return targetElem.GetAttribute("data");
+                }
+                else
+                {
+                    throw new ArgumentException($"Could not nagivate to the attribute name {AttributeName}");
+                }
+            }
+
+            private XmlElement GetElement(string AttributeName)
+            {
+                return mSettingsElem.SelectSingleNode($"value[@name='{AttributeName}']") as XmlElement;
+            }
         }
 
-        //[Test]
-        //public void TestStoringFontValues()
-        //{
-        //    IFontSettings f = mObj.FontSettings;
-        //    IConEmuStartInfoLoadSave c = mObj;
+        [Test]
+        public void TestStoringFontValues()
+        {
+            IFontSettings f = mObj.FontSettings;
+            IConEmuStartInfoLoadSave c = mObj;
 
-        //    f.FontName = "newName";
-        //    f.Bold = true;
-        //    f.Italic = true;
+            f.FontName = "newName";
+            f.Bold = true;
+            f.Italic = true;
+            f.FontSize = 5;
 
-        //    ConEmuStartInfo settingsSaved = c.GetConEmuStartInfo();
+            //Now let's look at what it actually stored.
 
-        //    Assert.IsNotNull(settingsSaved);
+            ConEmuLookAtSettings peek = new ConEmuLookAtSettings(c.GetStoredValues());
 
-        //    //Now let's look at what it actually stored.
-
-        //    ConEmuLookAtSettings peek = new ConEmuLookAtSettings(settingsSaved);
-
-
-        //}
+            Assert.AreEqual("newName", peek.GetStringDataAttributeFromName("FontName"));
+            Assert.AreEqual("01", peek.GetStringDataAttributeFromName("FontBold"));
+            Assert.AreEqual("01", peek.GetStringDataAttributeFromName("FontItalic"));
+            Assert.AreEqual("00000005", peek.GetStringDataAttributeFromName("FontSize"));
+        }
 
     }
 
