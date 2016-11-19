@@ -199,12 +199,14 @@
     <Compile Include="CommandsDialogs\SettingsDialog\Pages\DetailedSettingsPage.Designer.cs">
       <DependentUpon>DetailedSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConEmuSettings\ConEmuStartInfoDisplaySettings.cs" />
+    <Compile Include="ConEmuSettings\ConEmuSettings.cs" />
+    <Compile Include="ConEmuSettings\ConEmuSettingsBashCmdCreator.cs" />
     <Compile Include="ConEmuSettings\ConEmuStartInfoSettingsInterface.cs" />
     <Compile Include="ConEmuSettings\ConEmuStartInfoXmlInterface.cs" />
     <Compile Include="ConEmuSettings\IConEmuStartInfoLoadSave.cs" />
     <Compile Include="ConEmuSettings\IFontSettings.cs" />
     <Compile Include="ConEmuSettings\IDisplaySettings.cs" />
+    <Compile Include="ConEmuSettings\IShellSettings.cs" />
     <Compile Include="FormStatusOutputLog.cs" />
     <Compile Include="Editor\Diff\CombinedDiffHighlightService.cs" />
     <Compile Include="Editor\Diff\DiffHighlightService.cs" />

@@ -11,9 +11,9 @@ using System.Xml;
 
 namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 {
-    public class ConEmuSettingsUnitTests
+    public class ConEmuStartInfoDisplaySettingsUnitTests
     {
-        private class MockConEmuSettings : ConEmuStartInfoDisplaySettings
+        private class MockConEmuSettings : ConEmuSettings
         {
             public MockConEmuSettings()
                 : base ()
@@ -28,12 +28,20 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         private MockConEmuSettings mObj;
         private ConEmuStartInfo mStartInfo;
 
-        public ConEmuSettingsUnitTests()
+        public ConEmuStartInfoDisplaySettingsUnitTests()
         {
             mStartInfo = new ConEmuStartInfo();
 
             mObj = new MockConEmuSettings();
             mObj.LoadConEmuStartInfo(mStartInfo);
+        }
+
+        [Test]
+        public void TestFontSettingsAreNullWhenConEmuStartInfoNotLoaded()
+        {
+            MockConEmuSettings m = new MockConEmuSettings();
+
+            Assert.IsNull(m.FontSettings);
         }
 
         [Test]
@@ -131,7 +139,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             ConEmuStartInfo cesiBroken = new ConEmuStartInfo();
             cesiBroken.BaseConfiguration = new XmlDocument();   //blank XmlDocument, broke as shit!;
-            IConEmuStartInfoLoadSave m = new ConEmuStartInfoDisplaySettings();
+            IConEmuStartInfoLoadSave m = new ConEmuSettings();
 
             Assert.Throws<ArgumentException>(
                 delegate ()

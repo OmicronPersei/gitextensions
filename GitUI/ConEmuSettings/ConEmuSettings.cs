@@ -14,7 +14,7 @@ namespace GitUI.ConEmuSettings
     /// for easy display settings modification.  Display settings modification should use the 
     /// <see cref="IDisplaySettings"/> interface.</para>
     /// </summary>
-    internal class ConEmuStartInfoDisplaySettings : IDisplaySettings, IConEmuStartInfoLoadSave
+    internal class ConEmuSettings : IDisplaySettings, IConEmuStartInfoLoadSave
     {
         #region Field Name Constants
 
@@ -27,7 +27,7 @@ namespace GitUI.ConEmuSettings
 
         private ConEmuStartInfoSettingsInterface mSettings;
 
-        public ConEmuStartInfoDisplaySettings()
+        public ConEmuSettings()
         {
             mSettings = new ConEmuStartInfoSettingsInterface();
         }
