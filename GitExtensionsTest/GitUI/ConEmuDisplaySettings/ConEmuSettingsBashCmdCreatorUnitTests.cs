@@ -47,6 +47,8 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 		[Test]
 		public void TestConEmuSettingsAddParamsToShellPath()
 		{
+			TestInit();
+
 			Assert.AreEqual("C:\\path\\binary.exe --login -i", mCreator.MockAddParamsToShellpath(ConEmuShell.Bash, "C:\\path\\binary.exe"));
 			Assert.AreEqual("C:\\path\\binary.exe ", mCreator.MockAddParamsToShellpath(ConEmuShell.Cmd, "C:\\path\\binary.exe"));
 			Assert.AreEqual("C:\\path\\binary.exe ", mCreator.MockAddParamsToShellpath(ConEmuShell.PowerShell, "C:\\path\\binary.exe"));
@@ -55,6 +57,8 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 		[Test]
 		public void TestConEmuSettingsGetCorrespondingShellFileNames()
 		{
+			TestInit();
+
 			CollectionAssert.AreEqual(new string[] { "bash.exe", "sh.exe" }, mCreator.MockGetShellFileNames(ConEmuShell.Bash));
 			CollectionAssert.AreEqual(new string[] { "cmd.exe" }, mCreator.MockGetShellFileNames(ConEmuShell.Cmd));
 			CollectionAssert.AreEqual(new string[] { "powershell.exe" }, mCreator.MockGetShellFileNames(ConEmuShell.PowerShell));
@@ -63,10 +67,10 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 		[Test]
 		public void TestGettingFullShellPathSuccess()
 		{
-			mCreator.GiveBackShellPath = true;
+			TestInit();
 
 			string pathWithParams = mCreator.GetShellPathWithParams(ConEmuShell.Bash);
-			Assert.AreEqual("C:\\path\\binary.exe --login - i", pathWithParams);
+			Assert.AreEqual("C:\\path\\binary.exe --login -i", pathWithParams);
 
 			pathWithParams = mCreator.GetShellPathWithParams(ConEmuShell.Cmd);
 			Assert.AreEqual("C:\\path\\binary.exe ", pathWithParams);
@@ -78,6 +82,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 		[Test]
 		public void TestGetFullShellPathFailure()
 		{
+			TestInit();
 			mCreator.GiveBackShellPath = false;
 
 			string pathWithParams = mCreator.GetShellPathWithParams(ConEmuShell.Bash);
