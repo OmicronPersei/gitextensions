@@ -10,7 +10,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 	[TestFixture]
 	public class ConEmuSettingsBashCmdCreatorUnitTests
 	{
-		private class MockConEmuSettingsBashCmdCreator : ConEmuSettingsBashCmdCreator
+		private class MockConEmuSettingsBashCmdCreator : ConsolePathGetter
 		{
 			public bool GiveBackShellPath = true;
 
@@ -93,7 +93,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 
 	public class ConEmuSettingsPathFindingUnitTests
 	{
-		private class TestShellSelection : ConEmuSettingsBashCmdCreator
+		private class TestShellSelection : ConsolePathGetter
 		{
 
 			protected override bool AttemptFindShellPath(string shell, out string foundPath)

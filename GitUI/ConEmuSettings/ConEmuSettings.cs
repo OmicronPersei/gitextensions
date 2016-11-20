@@ -14,7 +14,7 @@ namespace GitUI.ConEmuSettings
     /// for easy display settings modification.  Display settings modification should use the 
     /// <see cref="IDisplaySettings"/> interface.</para>
     /// </summary>
-    internal class ConEmuSettings : IDisplaySettings, IConEmuStartInfoLoadSave
+    internal class ConEmuSettings : IDisplaySettings, ILoadConEmuStartInfo
     {
         #region Field Name Constants
 
@@ -32,7 +32,7 @@ namespace GitUI.ConEmuSettings
             mSettings = new ConEmuStartInfoSettingsInterface();
         }
 
-        #region IConEmuStartInfoLoadSave interface
+        #region ILoadConEmuStartInfo interface
 
         public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
@@ -41,12 +41,10 @@ namespace GitUI.ConEmuSettings
             LoadAllSettings();
         }
 
-        public ConEmuStartInfo GetStoredValues()
-        {
-            PackAllSettings();
-
-            return mSettings.GetStoredValues();
-        }
+        public void SaveSettings()
+		{
+			PackAllSettings();
+		}
 
         #endregion
 
@@ -68,7 +66,7 @@ namespace GitUI.ConEmuSettings
 
         public IFontSettings FontSettings { get; set; }
 
-        private class ConEmuFontSettings : IFontSettings
+		private class ConEmuFontSettings : IFontSettings
         {
             public bool Bold { get; set; }
             public string FontName { get; set; }
@@ -96,8 +94,13 @@ namespace GitUI.ConEmuSettings
             mSettings.SetBooleanValue(FontItalic, FontSettings.Italic);
         }
 
-        #endregion
+		#endregion
 
 
-    }
+
+		#region Shell Settings
+		
+
+		#endregion
+	}
 }

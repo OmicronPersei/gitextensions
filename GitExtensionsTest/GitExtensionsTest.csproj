@@ -94,6 +94,7 @@
     <Compile Include="GitCommands\Patch\PatchTest.cs" />
     <Compile Include="GitUI\AuthorEmailBasedRevisionHighlightingFixture.cs" />
     <Compile Include="GitUI\ConEmuDisplaySettings\ConEmuSettingsBashCmdCreatorUnitTests.cs" />
+    <Compile Include="GitUI\ConEmuDisplaySettings\ConEmuShellSettingsUnitTests.cs" />
     <Compile Include="GitUI\ConEmuDisplaySettings\ConEmuStartInfoDisplaySettingsUnitTests.cs" />
     <Compile Include="GitUI\ConEmuDisplaySettings\ConEmuStartInfoSettingsInterfaceUnitTests.cs" />
     <Compile Include="GitUI\ConEmuDisplaySettings\ConEmuStartInfoXmlInterfaceUnitTests.cs" />

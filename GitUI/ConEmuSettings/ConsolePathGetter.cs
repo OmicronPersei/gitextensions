@@ -7,10 +7,10 @@ using System.Text;
 namespace GitUI.ConEmuSettings
 {
 
-	internal class ConEmuSettingsBashCmdCreator
+	internal class ConsolePathGetter
 	{
 
-		public ConEmuSettingsBashCmdCreator()
+		public ConsolePathGetter()
 		{ }
 
 		/// <summary>

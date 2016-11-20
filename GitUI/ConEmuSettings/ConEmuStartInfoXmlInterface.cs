@@ -10,7 +10,7 @@ namespace GitUI.ConEmuSettings
     /// <summary>
     /// <para>Class for getting and setting values to the <see cref="ConEmuStartInfo.BaseConfiguration"/> </para>
     /// </summary>
-    internal class ConEmuStartInfoXmlInterface : IConEmuStartInfoLoadSave
+    internal class ConEmuStartInfoXmlInterface : ILoadConEmuStartInfo
     {
         #region XML Settings Constants
 
@@ -36,7 +36,7 @@ namespace GitUI.ConEmuSettings
         { }
 
         #endregion
-        #region IConEmuStartInfoLoadSave Interface
+        #region ILoadConEmuStartInfo Interface
 
         public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
@@ -45,10 +45,11 @@ namespace GitUI.ConEmuSettings
             LoadSettingsNode(StartInfo);
         }
 
-        public ConEmuStartInfo GetStoredValues()
-        {
-            return mSettingsObj;
-        }
+		public void SaveSettings()
+		{
+			//Nothing to do, all values are saved by virtue of having using write calls
+			//to set them.
+		}
 
         #endregion
 

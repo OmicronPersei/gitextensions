@@ -10,14 +10,14 @@ namespace GitUI.ConEmuSettings
     /// Class that is a wrapper around <see cref="ConEmuStartInfoXmlInterface"/> to provide
     /// the ability read/write formatted values to the settings object.
     /// </summary>
-    internal class ConEmuStartInfoSettingsInterface : IConEmuStartInfoLoadSave
+    internal class ConEmuStartInfoSettingsInterface : ILoadConEmuStartInfo
     {
         protected ConEmuStartInfoXmlInterface mXmlInterface;
 
         public ConEmuStartInfoSettingsInterface()
         { }
 
-        #region IConEmuStartInfoLoadSave Interface
+        #region ILoadConEmuStartInfo Interface
 
         public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
@@ -26,10 +26,11 @@ namespace GitUI.ConEmuSettings
             mXmlInterface.LoadConEmuStartInfo(StartInfo);
         }
 
-        public ConEmuStartInfo GetStoredValues()
-        {
-            return mXmlInterface.GetStoredValues();
-        }
+		public void SaveSettings()
+		{
+			//Nothing needed to be done.  All settings to be saved are already accomplished
+			//using XmlDocument node writes.
+		}
 
         #endregion
 

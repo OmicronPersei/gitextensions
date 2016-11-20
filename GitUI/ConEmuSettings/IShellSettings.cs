@@ -9,7 +9,8 @@ namespace GitUI.ConEmuSettings
     {
         PowerShell,
         Bash,
-        Cmd
+        Cmd,
+		Unknown
     };
 
     internal interface IShellSettings

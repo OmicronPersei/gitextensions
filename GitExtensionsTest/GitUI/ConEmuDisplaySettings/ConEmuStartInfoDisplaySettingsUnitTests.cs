@@ -109,16 +109,18 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         public void TestStoringFontValues()
         {
             IFontSettings f = mObj.FontSettings;
-            IConEmuStartInfoLoadSave c = mObj;
+            ILoadConEmuStartInfo c = mObj;
 
             f.FontName = "newName";
             f.Bold = true;
             f.Italic = true;
             f.FontSize = 5;
 
-            //Now let's look at what it actually stored.
+			//Now let's look at what it actually stored.
 
-            ConEmuLookAtSettings peek = new ConEmuLookAtSettings(c.GetStoredValues());
+			c.SaveSettings();
+
+            ConEmuLookAtSettings peek = new ConEmuLookAtSettings(mStartInfo);
 
             Assert.AreEqual("newName", peek.GetStringDataAttributeFromName("FontName"));
             Assert.AreEqual("01", peek.GetStringDataAttributeFromName("FontBold"));
@@ -139,7 +141,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             ConEmuStartInfo cesiBroken = new ConEmuStartInfo();
             cesiBroken.BaseConfiguration = new XmlDocument();   //blank XmlDocument, broke as shit!;
-            IConEmuStartInfoLoadSave m = new ConEmuSettings();
+            ILoadConEmuStartInfo m = new ConEmuSettings();
 
             Assert.Throws<ArgumentException>(
                 delegate ()
