@@ -10,11 +10,11 @@ namespace GitUI.ConEmuSettings
     /// Class that is a wrapper around <see cref="ConEmuStartInfoXmlInterface"/> to provide
     /// the ability read/write formatted values to the settings object.
     /// </summary>
-    internal class ConEmuStartInfoSettingsInterface : ILoadConEmuStartInfo
+    internal class ConEmuStartInfoSettingValueFormatting : ILoadConEmuStartInfo
     {
         protected ConEmuStartInfoXmlInterface mXmlInterface;
 
-        public ConEmuStartInfoSettingsInterface()
+        public ConEmuStartInfoSettingValueFormatting()
         { }
 
         #region ILoadConEmuStartInfo Interface

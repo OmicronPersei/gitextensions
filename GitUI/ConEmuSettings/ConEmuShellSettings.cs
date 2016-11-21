@@ -39,7 +39,14 @@ namespace GitUI.ConEmuSettings
 
 			string pathWithArgs = pathGetter.GetShellPathWithParams(ShellToLaunch);
 
-			mStartInfo.ConsoleProcessCommandLine = pathWithArgs;
+			if (pathWithArgs == null)
+			{
+				mStartInfo.ConsoleProcessCommandLine = ConEmuConstants.DefaultConsoleCommandLine;
+			}
+			else
+			{
+				mStartInfo.ConsoleProcessCommandLine = pathWithArgs;
+			}
 		}
 
 		#endregion

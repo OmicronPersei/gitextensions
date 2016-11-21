@@ -62,6 +62,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 			CollectionAssert.AreEqual(new string[] { "bash.exe", "sh.exe" }, mCreator.MockGetShellFileNames(ConEmuShell.Bash));
 			CollectionAssert.AreEqual(new string[] { "cmd.exe" }, mCreator.MockGetShellFileNames(ConEmuShell.Cmd));
 			CollectionAssert.AreEqual(new string[] { "powershell.exe" }, mCreator.MockGetShellFileNames(ConEmuShell.PowerShell));
+			Assert.AreEqual(null, mCreator.MockGetShellFileNames(ConEmuShell.Unknown));
 		}
 
 		[Test]
@@ -77,6 +78,9 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 
 			pathWithParams = mCreator.GetShellPathWithParams(ConEmuShell.PowerShell);
 			Assert.AreEqual("C:\\path\\binary.exe ", pathWithParams);
+
+			pathWithParams = mCreator.GetShellPathWithParams(ConEmuShell.Unknown);
+			Assert.AreEqual(null, pathWithParams);
 		}
 
 		[Test]

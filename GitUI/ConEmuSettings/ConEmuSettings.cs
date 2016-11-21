@@ -14,7 +14,7 @@ namespace GitUI.ConEmuSettings
     /// for easy display settings modification.  Display settings modification should use the 
     /// <see cref="IDisplaySettings"/> interface.</para>
     /// </summary>
-    internal class ConEmuSettings : IDisplaySettings, ILoadConEmuStartInfo
+    internal class ConEmuSettings : IDisplaySettings, IShellSettings, ILoadConEmuStartInfo
     {
         #region Field Name Constants
 
@@ -23,46 +23,54 @@ namespace GitUI.ConEmuSettings
         public const string FontBold = "FontBold";
         public const string FontItalic = "FontItalic";
 
-        #endregion
+		#endregion
+		#region Private members
 
-        private ConEmuStartInfoSettingsInterface mSettings;
+		private ConEmuStartInfoSettingValueFormatting mSettings;
+		private ConEmuShellSettings mShellSettings;
 
-        public ConEmuSettings()
+		#endregion
+		#region Constructor
+
+		public ConEmuSettings()
+        { }
+
+		#endregion
+		#region ILoadConEmuStartInfo interface
+
+		public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
-            mSettings = new ConEmuStartInfoSettingsInterface();
-        }
+			mSettings = new ConEmuStartInfoSettingValueFormatting();
+			mSettings.LoadConEmuStartInfo(StartInfo);
 
-        #region ILoadConEmuStartInfo interface
-
-        public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
-        {
-            mSettings.LoadConEmuStartInfo(StartInfo);
+			mShellSettings = InstantiateShellSettingsObj();
+			mShellSettings.LoadConEmuStartInfo(StartInfo);
 
             LoadAllSettings();
         }
 
         public void SaveSettings()
 		{
-			PackAllSettings();
+			StoreFontSettings();
+			StoreShellToLaunch();
 		}
 
         #endregion
-
         #region Private methods
 
         private void LoadAllSettings()
         {
             GetFontSettings();
+			GetShellToLaunch();
         }
 
-        private void PackAllSettings()
-        {
-            StoreFontSettings();
-        }
+		protected virtual ConEmuShellSettings InstantiateShellSettingsObj()
+		{
+			return new ConEmuShellSettings();
+		}
 
         #endregion  
-
-        #region DisplaySettings
+        #region IDisplaySettings Interface
 
         public IFontSettings FontSettings { get; set; }
 
@@ -89,17 +97,26 @@ namespace GitUI.ConEmuSettings
         private void StoreFontSettings()
         {
             mSettings.SetString(FontName, FontSettings.FontName);
-            mSettings.SetLongValue(FontSize, Convert.ToInt64(FontSettings.FontSize), ConEmuStartInfoSettingsInterface.IntFormatType.dword);
+            mSettings.SetLongValue(FontSize, Convert.ToInt64(FontSettings.FontSize), ConEmuStartInfoSettingValueFormatting.IntFormatType.dword);
             mSettings.SetBooleanValue(FontBold, FontSettings.Bold);
             mSettings.SetBooleanValue(FontItalic, FontSettings.Italic);
         }
 
 		#endregion
+		#region IShellSettings Interface
 
+		public ConEmuShell ShellToLaunch { get; set; }
 
+		private void GetShellToLaunch()
+		{
+			ShellToLaunch = mShellSettings.ShellToLaunch;
+		}
 
-		#region Shell Settings
-		
+		private void StoreShellToLaunch()
+		{
+			mShellSettings.ShellToLaunch = ShellToLaunch;
+			mShellSettings.SaveSettings();
+		}
 
 		#endregion
 	}

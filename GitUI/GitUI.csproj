@@ -202,7 +202,7 @@
     <Compile Include="ConEmuSettings\ConEmuSettings.cs" />
     <Compile Include="ConEmuSettings\ConsolePathGetter.cs" />
     <Compile Include="ConEmuSettings\ConEmuShellSettings.cs" />
-    <Compile Include="ConEmuSettings\ConEmuStartInfoSettingsInterface.cs" />
+    <Compile Include="ConEmuSettings\ConEmuStartInfoSettingValueFormatting.cs" />
     <Compile Include="ConEmuSettings\ConEmuStartInfoXmlInterface.cs" />
     <Compile Include="ConEmuSettings\ILoadConEmuStartInfo.cs" />
     <Compile Include="ConEmuSettings\IFontSettings.cs" />

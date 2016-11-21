@@ -11,24 +11,20 @@ using System.Xml;
 
 namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 {
-    public class ConEmuStartInfoDisplaySettingsUnitTests
+    public class ConEmuSettingsUnitTests
     {
         private class MockConEmuSettings : ConEmuSettings
         {
             public MockConEmuSettings()
                 : base ()
             { }
-
-            //public string MockGetDataAttributeFromName(string Attribute)
-            //{
-            //    return GetStringDataAttributeFromName(Attribute);
-            //}
+			
         }
 
         private MockConEmuSettings mObj;
         private ConEmuStartInfo mStartInfo;
 
-        public ConEmuStartInfoDisplaySettingsUnitTests()
+        public ConEmuSettingsUnitTests()
         {
             mStartInfo = new ConEmuStartInfo();
 
@@ -105,13 +101,13 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             }
         }
 
-        [Test]
+		[Test]
         public void TestStoringFontValues()
         {
             IFontSettings f = mObj.FontSettings;
             ILoadConEmuStartInfo c = mObj;
 
-            f.FontName = "newName";
+			f.FontName = "newName";
             f.Bold = true;
             f.Italic = true;
             f.FontSize = 5;
@@ -128,7 +124,69 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             Assert.AreEqual("00000005", peek.GetStringDataAttributeFromName("FontSize"));
         }
 
-    }
+		private class MockConEmuSettingsFakeBashFound : ConEmuSettings
+		{
+			private string mFakePath;
+
+			public MockConEmuSettingsFakeBashFound(string FakePath)
+				: base()
+			{
+				mFakePath = FakePath;
+			}
+
+			protected override ConEmuShellSettings InstantiateShellSettingsObj()
+			{
+				return new MockConEmuShellSettings(mFakePath);
+			}
+
+			private class MockConEmuShellSettings : ConEmuShellSettings
+			{
+				private string mFakePath;
+
+				public MockConEmuShellSettings(string FakePath)
+					: base()
+				{
+					mFakePath = FakePath;
+				}
+
+				protected override ConsolePathGetter InstantiateConsolePathGetter()
+				{
+					return new MockConsolePathGetter(mFakePath);
+				}
+
+				private class MockConsolePathGetter : ConsolePathGetter
+				{
+					private string mFakePath;
+
+					public MockConsolePathGetter(string FakePath)
+						: base()
+					{
+						mFakePath = FakePath;
+					}
+
+					protected override string AttemptFindShellPathSelectFirst(string[] ShellBinaryNames)
+					{
+						return mFakePath;
+					}
+				}
+			}
+		}
+
+		[Test]
+		public void TestSettingShellType()
+		{
+			string fakePath = "C:\\pw.exe";
+			ConEmuStartInfo sInfo = new ConEmuStartInfo();
+
+			MockConEmuSettingsFakeBashFound mock = new MockConEmuSettingsFakeBashFound(fakePath);
+			mock.LoadConEmuStartInfo(sInfo);
+			mock.ShellToLaunch = ConEmuShell.PowerShell;
+
+			mock.SaveSettings();
+
+			Assert.AreEqual("C:\\pw.exe ", sInfo.ConsoleProcessCommandLine);
+		}
+	}
 
     /// <summary>
     /// <para>Class for unit testing the behaviour of the settings object</para>

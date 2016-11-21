@@ -8,7 +8,7 @@ using System.Text;
 
 namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 {
-	public class ConEmuShellSettingsUnitTests
+	public class ConEmuShellSettingsLoadingUnitTests
 	{
 		private class MockConEmuShellSettings : ConEmuShellSettings
 		{
@@ -66,22 +66,105 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 
 		#endregion
 
-		#region Test saving ConEmuStartInfo
+		
+	}
 
+	public class ConEmuShellSettingsSavingUnitTests
+	{
+		private class MockPathFindingConEmuShellSettings : ConEmuShellSettings
+		{
+			public bool FindPathSuccess;
+			public string PathFound;
+
+			protected override ConsolePathGetter InstantiateConsolePathGetter()
+			{
+				MockConsolePathGetter mock = new MockConsolePathGetter();
+				mock.FindPathSuccess = FindPathSuccess;
+				mock.PathFound = PathFound;
+
+				return mock;
+			}
+		}
+
+		private class MockConsolePathGetter : ConsolePathGetter
+		{
+			public bool FindPathSuccess = true;
+			public string PathFound = string.Empty;
+
+			protected override bool AttemptFindShellPath(string shell, out string foundPath)
+			{
+				if (FindPathSuccess)
+				{
+					foundPath = PathFound;
+				}
+				else
+				{
+					foundPath = null;
+				}
+
+				return FindPathSuccess;
+			}
+
+		}
+		
 		[Test]
 		public void TestConEmuShellSettingsSetsBash()
 		{
 			ConEmuStartInfo startInfo = new ConEmuStartInfo();
 
-			ConEmuShellSettings shellSettings = new ConEmuShellSettings();
+			MockPathFindingConEmuShellSettings shellSettings = new MockPathFindingConEmuShellSettings();
+			shellSettings.FindPathSuccess = true;
+			shellSettings.PathFound = "C:\\bash.exe";
+
 			shellSettings.LoadConEmuStartInfo(startInfo);
 
 			shellSettings.ShellToLaunch = ConEmuShell.Bash;
 
 			shellSettings.SaveSettings();
 
-			Assert.Fail("need to continue implementing this test");
+			string expectedPathWithParams = "C:\\bash.exe --login -i";
 
+			Assert.AreEqual(expectedPathWithParams, startInfo.ConsoleProcessCommandLine);
+		}
+
+		[Test]
+		public void TestConEmuShellSettingsSetsPowershell()
+		{
+			ConEmuStartInfo startInfo = new ConEmuStartInfo();
+
+			MockPathFindingConEmuShellSettings shellSettings = new MockPathFindingConEmuShellSettings();
+			shellSettings.FindPathSuccess = true;
+			shellSettings.PathFound = "C:\\pw.exe";
+
+			shellSettings.LoadConEmuStartInfo(startInfo);
+
+			shellSettings.ShellToLaunch = ConEmuShell.PowerShell;
+
+			shellSettings.SaveSettings();
+
+			string expectedPathWithParams = "C:\\pw.exe ";
+
+			Assert.AreEqual(expectedPathWithParams, startInfo.ConsoleProcessCommandLine);
+		}
+
+		[Test]
+		public void TestConEmuShellSettingsSetsWindowsCmd()
+		{
+			ConEmuStartInfo startInfo = new ConEmuStartInfo();
+
+			MockPathFindingConEmuShellSettings shellSettings = new MockPathFindingConEmuShellSettings();
+			shellSettings.FindPathSuccess = true;
+			shellSettings.PathFound = "C:\\cmd.exe";
+
+			shellSettings.LoadConEmuStartInfo(startInfo);
+
+			shellSettings.ShellToLaunch = ConEmuShell.Cmd;
+
+			shellSettings.SaveSettings();
+
+			string expectedPathWithParams = "C:\\cmd.exe ";
+
+			Assert.AreEqual(expectedPathWithParams, startInfo.ConsoleProcessCommandLine);
 		}
 
 		[Test]
@@ -89,16 +172,33 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 		{
 			ConEmuStartInfo startInfo = new ConEmuStartInfo();
 
-			ConEmuShellSettings shellSettings = new ConEmuShellSettings();
+			MockPathFindingConEmuShellSettings shellSettings = new MockPathFindingConEmuShellSettings();
+			shellSettings.FindPathSuccess = true;
+
 			shellSettings.LoadConEmuStartInfo(startInfo);
 
 			shellSettings.ShellToLaunch = ConEmuShell.Unknown;
 
 			shellSettings.SaveSettings();
 
-			Assert.Fail("need to continue implementing this test");
+			Assert.AreEqual(ConEmuConstants.DefaultConsoleCommandLine, startInfo.ConsoleProcessCommandLine);
 		}
 
-		#endregion
+		[Test]
+		public void TestConEmuShellSettingsSetsDefaultWhenCantFindPath()
+		{
+			ConEmuStartInfo startInfo = new ConEmuStartInfo();
+
+			MockPathFindingConEmuShellSettings shellSettings = new MockPathFindingConEmuShellSettings();
+			shellSettings.FindPathSuccess = false;
+
+			shellSettings.LoadConEmuStartInfo(startInfo);
+
+			shellSettings.ShellToLaunch = ConEmuShell.Bash;
+
+			shellSettings.SaveSettings();
+
+			Assert.AreEqual(ConEmuConstants.DefaultConsoleCommandLine, startInfo.ConsoleProcessCommandLine);
+		}
 	}
 }

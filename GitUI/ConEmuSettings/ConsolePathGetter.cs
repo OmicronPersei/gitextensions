@@ -80,7 +80,7 @@ namespace GitUI.ConEmuSettings
 					return new string[] { "powershell.exe" };
 
 				default:
-					throw new NotImplementedException("The ConEmu shell type is unknown.  Not able to determine the correct starting parameters for it");
+					return null;
 			}
 		}
 
@@ -93,17 +93,24 @@ namespace GitUI.ConEmuSettings
 		{
 			string[] binaryNamesForShellType = GetShellFileNames(ShellType);
 
-			string pathToShell = AttemptFindShellPathSelectFirst(binaryNamesForShellType);
-
-			if (!pathToShell.IsNullOrEmpty())
+			if (binaryNamesForShellType == null)
 			{
-				string pathWithParams = AddParamsToShellPath(ShellType, pathToShell);
-
-				return pathWithParams;
+				return null;
 			}
 			else
 			{
-				return null;
+				string pathToShell = AttemptFindShellPathSelectFirst(binaryNamesForShellType);
+
+				if (!pathToShell.IsNullOrEmpty())
+				{
+					string pathWithParams = AddParamsToShellPath(ShellType, pathToShell);
+
+					return pathWithParams;
+				}
+				else
+				{
+					return null;
+				}
 			}
 		}
 	}
