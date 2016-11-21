@@ -173,7 +173,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 		}
 
 		[Test]
-		public void TestSettingShellType()
+		public void TestSettingShellTypePowershell()
 		{
 			string fakePath = "C:\\pw.exe";
 			ConEmuStartInfo sInfo = new ConEmuStartInfo();
@@ -185,6 +185,21 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 			mock.SaveSettings();
 
 			Assert.AreEqual("C:\\pw.exe ", sInfo.ConsoleProcessCommandLine);
+		}
+
+		[Test]
+		public void TestSettingShellTypeBash()
+		{
+			string fakePath = "C:\\bash.exe";
+			ConEmuStartInfo sInfo = new ConEmuStartInfo();
+
+			MockConEmuSettingsFakeBashFound mock = new MockConEmuSettingsFakeBashFound(fakePath);
+			mock.LoadConEmuStartInfo(sInfo);
+			mock.ShellToLaunch = ConEmuShell.Bash;
+
+			mock.SaveSettings();
+
+			Assert.AreEqual("C:\\bash.exe --login -i", sInfo.ConsoleProcessCommandLine);
 		}
 	}
 
@@ -199,9 +214,9 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             ConEmuStartInfo cesiBroken = new ConEmuStartInfo();
             cesiBroken.BaseConfiguration = new XmlDocument();   //blank XmlDocument, broke as shit!;
-            ILoadConEmuStartInfo m = new ConEmuSettings();
 
-            Assert.Throws<ArgumentException>(
+            ILoadConEmuStartInfo m = new ConEmuSettings();
+            Assert.Throws(typeof(NullReferenceException),
                 delegate ()
                 {
                     m.LoadConEmuStartInfo(cesiBroken);

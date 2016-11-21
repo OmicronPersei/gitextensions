@@ -1,18 +1,12 @@
 ﻿using ConEmu.WinForms;
-using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Xml;
 
 namespace GitUI.ConEmuSettings
 {
     /// <summary>
     /// <para>Provides a wrapper and getter around the <see cref="ConEmuStartInfo"/> class to allow
-    /// for easy display settings modification.  Display settings modification should use the 
-    /// <see cref="IDisplaySettings"/> interface.</para>
+    /// for easy, encapsulated settings modification.</para>
+	/// <para>Display settings modification should use the <see cref="IDisplaySettings"/> interface.</para>
     /// </summary>
     internal class ConEmuSettings : IDisplaySettings, IShellSettings, ILoadConEmuStartInfo
     {
@@ -26,7 +20,15 @@ namespace GitUI.ConEmuSettings
 		#endregion
 		#region Private members
 
-		private ConEmuStartInfoSettingValueFormatting mSettings;
+		/// <summary>
+		/// Allows formattable value get/set of settings values.
+		/// </summary>
+		private ConEmuSettingValueFormatting mSettings;
+
+		/// <summary>
+		/// <para>Provides an interface to changing the shell to be launched.  Encapsulates 
+		/// getting the path to the specified shell.</para>
+		/// </summary>
 		private ConEmuShellSettings mShellSettings;
 
 		#endregion
@@ -40,7 +42,7 @@ namespace GitUI.ConEmuSettings
 
 		public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
-			mSettings = new ConEmuStartInfoSettingValueFormatting();
+			mSettings = new ConEmuSettingValueFormatting();
 			mSettings.LoadConEmuStartInfo(StartInfo);
 
 			mShellSettings = InstantiateShellSettingsObj();
@@ -55,10 +57,13 @@ namespace GitUI.ConEmuSettings
 			StoreShellToLaunch();
 		}
 
-        #endregion
-        #region Private methods
+		#endregion
+		#region Private methods
 
-        private void LoadAllSettings()
+		/// <summary>
+		/// Master method for reading the current settings from the provided <see cref="ConEmuStartInfo"/> object.
+		/// </summary>
+		private void LoadAllSettings()
         {
             GetFontSettings();
 			GetShellToLaunch();
@@ -82,7 +87,10 @@ namespace GitUI.ConEmuSettings
             public bool Italic { get; set; }
         }
 
-        private void GetFontSettings()
+		/// <summary>
+		/// Parse font settings from the <see cref="mSettings"/> object.
+		/// </summary>
+		private void GetFontSettings()
         {
             IFontSettings fs = new ConEmuFontSettings();
 
@@ -94,10 +102,13 @@ namespace GitUI.ConEmuSettings
             FontSettings = fs;
         }
 
-        private void StoreFontSettings()
+		/// <summary>
+		/// Store settings to the <see cref="mSettings"/> object.
+		/// </summary>
+		private void StoreFontSettings()
         {
             mSettings.SetString(FontName, FontSettings.FontName);
-            mSettings.SetLongValue(FontSize, Convert.ToInt64(FontSettings.FontSize), ConEmuStartInfoSettingValueFormatting.IntFormatType.dword);
+            mSettings.SetLongValue(FontSize, Convert.ToInt64(FontSettings.FontSize), ConEmuSettingValueFormatting.IntFormatType.dword);
             mSettings.SetBooleanValue(FontBold, FontSettings.Bold);
             mSettings.SetBooleanValue(FontItalic, FontSettings.Italic);
         }
@@ -107,11 +118,17 @@ namespace GitUI.ConEmuSettings
 
 		public ConEmuShell ShellToLaunch { get; set; }
 
+		/// <summary>
+		/// Load the parsed shell from the <see cref="mShellSettings"/> object.
+		/// </summary>
 		private void GetShellToLaunch()
 		{
 			ShellToLaunch = mShellSettings.ShellToLaunch;
 		}
 
+		/// <summary>
+		/// Store the shell to be launched into the <see cref="mShellSettings"/> object.
+		/// </summary>
 		private void StoreShellToLaunch()
 		{
 			mShellSettings.ShellToLaunch = ShellToLaunch;

@@ -10,11 +10,11 @@ namespace GitUI.ConEmuSettings
     /// Class that is a wrapper around <see cref="ConEmuStartInfoXmlInterface"/> to provide
     /// the ability read/write formatted values to the settings object.
     /// </summary>
-    internal class ConEmuStartInfoSettingValueFormatting : ILoadConEmuStartInfo
+    internal class ConEmuSettingValueFormatting : ILoadConEmuStartInfo
     {
         protected ConEmuStartInfoXmlInterface mXmlInterface;
 
-        public ConEmuStartInfoSettingValueFormatting()
+        public ConEmuSettingValueFormatting()
         { }
 
         #region ILoadConEmuStartInfo Interface
@@ -28,7 +28,7 @@ namespace GitUI.ConEmuSettings
 
 		public void SaveSettings()
 		{
-			//Nothing needed to be done.  All settings to be saved are already accomplished
+			//Nothing to be done.  All settings to be saved are already accomplished
 			//using XmlDocument node writes.
 		}
 
@@ -36,9 +36,7 @@ namespace GitUI.ConEmuSettings
 
         protected virtual ConEmuStartInfoXmlInterface InstantiateXmlInterface(ConEmuStartInfo StartInfo)
         {
-            ConEmuStartInfoXmlInterface xmlInterface = new ConEmuStartInfoXmlInterface();
-
-            return xmlInterface;
+            return new ConEmuStartInfoXmlInterface();
         }
 
         #region Data formatting
@@ -81,7 +79,12 @@ namespace GitUI.ConEmuSettings
             }
         }
 
-        protected string GetFormattedValue(bool Value)
+		/// <summary>
+		/// Format a boolean as a single byte string.
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		protected string GetFormattedValue(bool Value)
         {
             if (!Value)
             {
@@ -93,7 +96,12 @@ namespace GitUI.ConEmuSettings
             }
         }
 
-        protected bool ParseBoolean(string val)
+		/// <summary>
+		/// Parse boolean from single byte string.
+		/// </summary>
+		/// <param name="val"></param>
+		/// <returns></returns>
+		protected bool ParseBoolean(string val)
         {
             if (val == "00")
             {
@@ -109,40 +117,76 @@ namespace GitUI.ConEmuSettings
             }
         }
 
-        protected long ParseLongInt(string Value)
+		/// <summary>
+		/// Parse long integer from hexadecimal string.
+		/// </summary>
+		/// <param name="Value"></param>
+		/// <returns></returns>
+		protected long ParseLongInt(string Value)
         {
             return Convert.ToInt64(Value, 16);
         }
 
-        #endregion
-        #region Data setters/getters
+		#endregion
+		#region Data setters/getters
 
-        public bool GetBooleanValue(string Name)
+		/// <summary>
+		/// Get the boolean value of the respective name.
+		/// </summary>
+		/// <param name="Name"></param>
+		/// <returns></returns>
+		public bool GetBooleanValue(string Name)
         {
             return ParseBoolean(mXmlInterface.GetStringDataAttributeFromName(Name));
         }
 
-        public void SetBooleanValue(string Name, bool Value)
+		/// <summary>
+		/// Set the boolean value of the respective name.
+		/// </summary>
+		/// <param name="Name"></param>
+		/// <param name="Value"></param>
+		public void SetBooleanValue(string Name, bool Value)
         {
             mXmlInterface.SetDataValueForAttribute(Name, GetFormattedValue(Value));
         }
 
-        public long GetLongValue(string Name)
+		/// <summary>
+		/// Get the long integer value of the respective name.
+		/// </summary>
+		/// <param name="Name"></param>
+		/// <returns></returns>
+		public long GetLongValue(string Name)
         {
             return ParseLongInt(mXmlInterface.GetStringDataAttributeFromName(Name));
         }
 
-        public void SetLongValue(string Name, long value, IntFormatType FormatType)
+		/// <summary>
+		/// Set the integer / long integer value of the specified name and the specified storage type.
+		/// </summary>
+		/// <param name="Name"></param>
+		/// <param name="value"></param>
+		/// <param name="FormatType"></param>
+		public void SetLongValue(string Name, long value, IntFormatType FormatType)
         {
             mXmlInterface.SetDataValueForAttribute(Name, GetFormattedValue(value, FormatType));
         }
 
-        public string GetString(string Name)
+		/// <summary>
+		/// Get the string value of the respective name.
+		/// </summary>
+		/// <param name="Name"></param>
+		/// <returns></returns>
+		public string GetString(string Name)
         {
             return mXmlInterface.GetStringDataAttributeFromName(Name);
         }
 
-        public void SetString(string Name, string Value)
+		/// <summary>
+		/// Set the string value of the respective name.
+		/// </summary>
+		/// <param name="Name"></param>
+		/// <param name="Value"></param>
+		public void SetString(string Name, string Value)
         {
             mXmlInterface.SetDataValueForAttribute(Name, Value);
         }

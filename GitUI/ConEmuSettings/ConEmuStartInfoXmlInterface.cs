@@ -8,7 +8,8 @@ using System.Xml;
 namespace GitUI.ConEmuSettings
 {
     /// <summary>
-    /// <para>Class for getting and setting values to the <see cref="ConEmuStartInfo.BaseConfiguration"/> </para>
+    /// <para>Class for getting and setting values to the <see cref="ConEmuStartInfo.BaseConfiguration"/> object. </para>
+	/// <para>Class handles navigating to the appropriate nodes for getting/setting ConEmu setting values.</para>
     /// </summary>
     internal class ConEmuStartInfoXmlInterface : ILoadConEmuStartInfo
     {
@@ -22,12 +23,13 @@ namespace GitUI.ConEmuSettings
         public const string XmlFontBold = "FontBold";
         public const string XmlFontItalic = "FontItalic";
 
-        #endregion
-        #region Private members
+		#endregion
+		#region Private members
 
-        protected XmlDocument mSettingsXml;
-        protected XmlElement mSettingsElem;
-        private ConEmuStartInfo mSettingsObj;
+		/// <summary>
+		/// Root <see cref="XmlElement"/> of where the settings reside.
+		/// </summary>
+		protected XmlElement mSettingsElem;
 
         #endregion
         #region Constructor
@@ -40,8 +42,6 @@ namespace GitUI.ConEmuSettings
 
         public void LoadConEmuStartInfo(ConEmuStartInfo StartInfo)
         {
-            mSettingsObj = StartInfo;
-
             LoadSettingsNode(StartInfo);
         }
 
@@ -51,22 +51,19 @@ namespace GitUI.ConEmuSettings
 			//to set them.
 		}
 
-        #endregion
+		#endregion
 
-        protected virtual void LoadSettingsNode(ConEmuStartInfo StartInfo)
+		/// <summary>
+		/// Navigate to and store a reference to the root settings node.
+		/// </summary>
+		/// <param name="StartInfo"></param>
+		protected virtual void LoadSettingsNode(ConEmuStartInfo StartInfo)
         {
-            try
-            {
-                var softwareNode = StartInfo.BaseConfiguration.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueSoftware}']") as XmlElement;
-                var conEmuNode = softwareNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueConEmu}']") as XmlElement;
-                var vanillaNode = conEmuNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueDotVanilla}']") as XmlElement;
+            var softwareNode = StartInfo.BaseConfiguration.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueSoftware}']") as XmlElement;
+            var conEmuNode = softwareNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueConEmu}']") as XmlElement;
+            var vanillaNode = conEmuNode.SelectSingleNode($"{ConEmuConstants.XmlElementKey}[@{ConEmuConstants.XmlAttrName}='{ConEmuConstants.XmlValueDotVanilla}']") as XmlElement;
 
-                mSettingsElem = vanillaNode as XmlElement;
-            }
-            catch
-            {
-                throw new ArgumentException("Could not navigate to the setttings node.");
-            }
+            mSettingsElem = vanillaNode as XmlElement;
         }
 
         #region XmlDocument getters/setters
@@ -90,7 +87,12 @@ namespace GitUI.ConEmuSettings
             }
         }
 
-        private XmlElement GetElement(string AttributeName)
+		/// <summary>
+		/// Get <see cref="XmlElement"/> of the node with the matching <see cref=" ConEmuConstants.XmlAttrName"/>.
+		/// </summary>
+		/// <param name="AttributeName"></param>
+		/// <returns></returns>
+		private XmlElement GetElement(string AttributeName)
         {
             return mSettingsElem.SelectSingleNode($"{XmlValueNodeName}[@{ConEmuConstants.XmlAttrName}='{AttributeName}']") as XmlElement;
         }

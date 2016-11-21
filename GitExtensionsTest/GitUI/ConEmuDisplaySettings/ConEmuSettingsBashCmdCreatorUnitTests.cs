@@ -7,7 +7,6 @@ using System.Text;
 
 namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 {
-	[TestFixture]
 	public class ConEmuSettingsBashCmdCreatorUnitTests
 	{
 		private class MockConEmuSettingsBashCmdCreator : ConsolePathGetter
@@ -179,7 +178,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 		}
 
 		[Test]
-		public void TestConEmuSettingsSelectFirstAvailableBasePathNoneAvail()
+		public void TestConEmuSettingsSelectsNoPathNoneAvail()
 		{
 			TestShellSelection.OverrideShellFindPath secondAvail = new TestShellSelection.OverrideShellFindPath(
 				delegate (string Shell, out string FoundPath)
@@ -230,7 +229,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 		}
 
 		[Test]
-		public void TestConEmuSettingsSelectsFirstAvailableBashPathUnrecognizedBinaryName()
+		public void TestConEmuSettingsSelectsNoPathUnrecognizedBinaryName()
 		{
 			TestShellSelection.OverrideShellFindPath bothAvail = new TestShellSelection.OverrideShellFindPath(
 				delegate (string Shell, out string FoundPath)

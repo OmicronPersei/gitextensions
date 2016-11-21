@@ -52,11 +52,21 @@ namespace GitUI.ConEmuSettings
 		#endregion
 		#region Private methods
 
+		#region Command line executable names
+
 		private const string BashFilename = "bash.exe";
 		private const string PowershellFilename = "powershell.exe";
 		private const string ShFilename = "sh.exe";
 		private const string WindowsConsoleFilename = "cmd.exe";
 
+		#endregion
+
+		/// <summary>
+		/// <para>Determine the matching <see cref="ConEmuShell"/> from the provided <see cref="ConEmuStartInfo"/>
+		/// object.</para>
+		/// </summary>
+		/// <param name="StartInfo"></param>
+		/// <returns></returns>
 		protected ConEmuShell ParseShellFromStartInfo(ConEmuStartInfo StartInfo)
 		{
 			string startCmdLine = StartInfo.ConsoleProcessCommandLine.ToLower();
@@ -79,6 +89,10 @@ namespace GitUI.ConEmuSettings
 			}
 		}
 
+		/// <summary>
+		/// Create the path getter object.
+		/// </summary>
+		/// <returns></returns>
 		protected virtual ConsolePathGetter InstantiateConsolePathGetter()
 		{
 			return new ConsolePathGetter();

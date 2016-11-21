@@ -7,9 +7,12 @@ using System.Text;
 namespace GitUI.ConEmuSettings
 {
 
+	/// <summary>
+	/// <para>Class used to obtain the path to the requested shell type,
+	/// including necessary arguments.</para>
+	/// </summary>
 	internal class ConsolePathGetter
 	{
-
 		public ConsolePathGetter()
 		{ }
 
@@ -39,15 +42,41 @@ namespace GitUI.ConEmuSettings
 			return pathToUse;
 		}
 
+		/// <summary>
+		/// <para>Query the static lookup function to find the requested 
+		/// executable name.  Serves as a wrapper around global/static code.</para>
+		/// </summary>
+		/// <param name="shell"></param>
+		/// <param name="foundPath"></param>
+		/// <returns></returns>
 		protected virtual bool AttemptFindShellPath(string shell, out string foundPath)
 		{
 			return PathUtil.TryFindShellPath(shell, out foundPath);
 		}
 
+		#region Arguments for shell constants
+		/// <summary>
+		/// Default arguments for bash.exe
+		/// </summary>
 		private const string BashShellParams = "--login -i";
-		private const string PowerShellParams = "";
-		private const string WindowsCmdParams = "";
 
+		/// <summary>
+		/// Default arguments for powershell.exe
+		/// </summary>
+		private const string PowerShellParams = "";
+
+		/// <summary>
+		/// Default arguments for cmd.exe
+		/// </summary>
+		private const string WindowsCmdParams = "";
+		#endregion
+
+		/// <summary>
+		/// <para>Adds static arguments to the requested shell.</para>
+		/// </summary>
+		/// <param name="ShellType"></param>
+		/// <param name="ShellPath"></param>
+		/// <returns></returns>
 		protected string AddParamsToShellPath(ConEmuShell ShellType, string ShellPath)
 		{
 			switch (ShellType)
@@ -66,6 +95,12 @@ namespace GitUI.ConEmuSettings
 			}
 		}
 
+		/// <summary>
+		/// <para>Gets filenames of the requested <see cref="ConEmuShell"/> type, in descending order
+		/// of preference.</para>
+		/// </summary>
+		/// <param name="ShellType"></param>
+		/// <returns></returns>
 		protected string[] GetShellFileNames(ConEmuShell ShellType)
 		{
 			switch (ShellType)

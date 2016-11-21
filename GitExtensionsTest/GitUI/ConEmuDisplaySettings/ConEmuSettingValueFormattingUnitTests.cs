@@ -8,11 +8,11 @@ using System.Text;
 
 namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
 {
-    public class ConEmuStartInfoSettingValueFormattingUnitTests
+    public class ConEmuSettingValueFormattingUnitTests
     {
         #region Test Setup
 
-        private class MockSettingsInterface : ConEmuStartInfoSettingValueFormatting
+        private class MockSettingsInterface : ConEmuSettingValueFormatting
         {
             public MockSettingsInterface()
                 : base()
@@ -83,7 +83,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             }
         }
 
-        public ConEmuStartInfoSettingValueFormattingUnitTests()
+        public ConEmuSettingValueFormattingUnitTests()
         {
             mMock = new MockSettingsInterface();
             mMock.LoadConEmuStartInfo(null);
@@ -98,7 +98,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             int val = 0xFE;
 
-            string actual = mMock.MockGetFormattedValue(val, ConEmuStartInfoSettingValueFormatting.IntFormatType.hex);
+            string actual = mMock.MockGetFormattedValue(val, ConEmuSettingValueFormatting.IntFormatType.hex);
 
             Assert.AreEqual("FE", actual);
         }
@@ -111,7 +111,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             Assert.Throws<ArgumentOutOfRangeException>(
                 delegate ()
                 {
-                    mMock.MockGetFormattedValue(val, ConEmuStartInfoSettingValueFormatting.IntFormatType.hex);
+                    mMock.MockGetFormattedValue(val, ConEmuSettingValueFormatting.IntFormatType.hex);
                 });
         }
 
@@ -123,7 +123,7 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
             Assert.Throws<ArgumentOutOfRangeException>(
                 delegate ()
                 {
-                    mMock.MockGetFormattedValue(val, ConEmuStartInfoSettingValueFormatting.IntFormatType.dword);
+                    mMock.MockGetFormattedValue(val, ConEmuSettingValueFormatting.IntFormatType.dword);
                 });
         }
 
@@ -132,13 +132,13 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         {
             long val = 0xFFFFFFFF;
 
-            string actual = mMock.MockGetFormattedValue(val, ConEmuStartInfoSettingValueFormatting.IntFormatType.dword);
+            string actual = mMock.MockGetFormattedValue(val, ConEmuSettingValueFormatting.IntFormatType.dword);
 
             Assert.AreEqual("FFFFFFFF", actual);
 
             val = 0x0000000f;
 
-            actual = mMock.MockGetFormattedValue(val, ConEmuStartInfoSettingValueFormatting.IntFormatType.dword);
+            actual = mMock.MockGetFormattedValue(val, ConEmuSettingValueFormatting.IntFormatType.dword);
 
             Assert.AreEqual("0000000F", actual);
         }
@@ -214,14 +214,14 @@ namespace GitExtensionsTest.GitUI.ConEmuDisplaySettings
         [Test]
         public void TestSetLongValueFormattedHex()
         {
-            mMock.SetLongValue("", 0xFE, ConEmuStartInfoSettingValueFormatting.IntFormatType.hex);
+            mMock.SetLongValue("", 0xFE, ConEmuSettingValueFormatting.IntFormatType.hex);
             Assert.AreEqual("FE", mMockXml.AttributeValueLastSet);
         }
 
         [Test]
         public void TestSetLongValueFormattedDword()
         {
-            mMock.SetLongValue("", 0xF0000000, ConEmuStartInfoSettingValueFormatting.IntFormatType.dword);
+            mMock.SetLongValue("", 0xF0000000, ConEmuSettingValueFormatting.IntFormatType.dword);
             Assert.AreEqual("F0000000", mMockXml.AttributeValueLastSet);
         }
 
